@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <div>
+            <img src="{{profile.profile_image.url}}" alt="" width="100" />
+            <h1>{{profile.nickname}}</h1>
+            <p>{{profile.school}}/{{profile.gender}}/{{profile.age}}/{{profile.mbti}}</p>
+            <p>{{profile.major}} {{profile.goal}}</p>
+            <p>{{profile.club}}</p>
+            {% for interest in profile.interest.all %}
+            <p>#{{interest}}</p>
+            {% endfor %}
+        </div>
+        <div>
+            <a href="{% url 'yk:ask' user.id%}"><button>ask</button></a>
+        </div>
+        <div>
+            {% for ask in asks %}
+            <p>q. {{ask}}</p>
+            {% for answer in ask.ask.all %}
+            <p>a. {{answer}}</p>
+            {% endfor %} {% endfor %}
+        </div>
+        <form action="">
+            <input type="text" placeholder="친구에게 익명으로 ask를 해보세요!" />
+        </form>
+        <br />
+        <button>넘기기</button>
+        <button>FRIENDS</button>
+    </body>
+</html>

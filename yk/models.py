@@ -43,6 +43,10 @@ class Profile(models.Model):
         settings.AUTH_USER_MODEL, related_name='following', blank=True)
     follower = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='follower', blank=True)
+    today_friends = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='today_friends', blank=True)
+    yesterday_friends = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='yesterday_friends', blank=True)
 
     def __str__(self):
         return self.user.username

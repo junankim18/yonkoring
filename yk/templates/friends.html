@@ -1,0 +1,33 @@
+<h3>friends</h3>
+<div>
+    <h3>내가 받은 친구</h3>
+    {% for follower in follower_list %}
+    <a href="{% url 'yk:profile' follower.user.id%}"><p>{{follower.nickname}}</p></a>
+    <img src="{{follower.profile_image.url}}" alt="" width="100" />
+    <a href="{% url 'yk:accept_friends' follower.user.id%}"><button>FRIENDS!</button></a>
+
+    {% endfor %}
+</div>
+<div>
+    <h3>내가 보낸 친구</h3>
+    {% for following in following_list %}
+    <a href="{% url 'yk:profile' following.user.id%}"><p>{{following.nickname}}</p></a>
+    <img src="{{following.profile_image.url}}" alt="" width="100" />
+    {% endfor %}
+</div>
+<div>
+    <h3>오늘 친구</h3>
+    {% for today_friend in today_friends_list %}
+    <a href="{% url 'yk:profile' today_friend.user.id%}"><p>{{today_friend.nickname}}</p></a>
+    <img src="{{today_friend.profile_image.url}}" alt="" width="100" />
+
+    {% endfor %}
+</div>
+<div>
+    <h3>어제 친구</h3>
+    {% for yesterday_friend in yesterday_friends_list %}
+    <a href="{% url 'yk:profile' yesterday_friend.user.id%}"><p>{{yesterday_friend.nickname}}</p></a>
+    <img src="{{yesterday_friend.profile_image.url}}" alt="" width="100" />
+
+    {% endfor %}
+</div>

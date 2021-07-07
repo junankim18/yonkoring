@@ -1,12 +1,20 @@
+import random
 from django.shortcuts import render, redirect
 from .models import *
 from django.contrib.auth.models import User
 
 
 def main(request):
+    admin = User.objects.get(id=1)
+    user_list = list(User.objects.all())
+    user_list.remove(request.user)
+    user_list.remove(admin)
+    random_user = random.choice(user_list)
+
     user = request.user
     ctx = {
-        'user': user
+        'user': user,
+        'random_user': random_user,
     }
     return render(request, 'main.html', ctx)
 
@@ -89,7 +97,7 @@ def join3(request):
     elif request.method == 'POST':
         interest_list = request.POST['interest']
         interest_num = len(interest_list.split('#'))
-        for i in range(interest_num):
+        for i in range(1, interest_num):
             globals()["new_interest{}".format(i)] = Interest()
             globals()["new_interest{}".format(
                 i)].interest = interest_list.split('#')[i]
@@ -125,20 +133,28 @@ def social_login(request):
 
 def profile(request, pk):
     user = User.objects.get(id=pk)
+    admin = User.objects.get(id=1)
     profile = Profile.objects.get(user=user)
     asks = list(Ask.objects.filter(ask_to=user))
+    user_list = list(User.objects.all())
+    user_list.remove(user)
+    user_list.remove(request.user)
+    user_list.remove(admin)
+    random_user = random.choice(user_list)
+
     for ask in asks:
         if len(ask.ask.all()) == 0:
             asks.remove(ask)
     ctx = {
         'user': user,
         'profile': profile,
-        'asks': asks
+        'asks': asks,
+        'random_user': random_user
     }
     return render(request, 'profile.html', ctx)
 
 
-def my_profile(request, pk):
+def my_profile(request):
     user = request.user
     profile = Profile.objects.get(user=user)
     asks = list(Ask.objects.filter(ask_to=user))
@@ -155,3 +171,80 @@ def ask(request, pk):
 
     }
     return render(request, 'ask.html', ctx)
+
+
+def friends(request):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    followings = profile.following.all()
+    following_list = []
+    for following in followings:
+        following_list.append(Profile.objects.get(user=following))
+
+    followers = profile.follower.all()
+    follower_list = []
+    for follower in followers:
+        follower_list.append(Profile.objects.get(user=follower))
+
+    today_friends = profile.today_friends.all()
+    today_friends_list = []
+    for today_friend in today_friends:
+        today_friends_list.append(Profile.objects.get(user=today_friend))
+
+    yesterday_friends = profile.yesterday_friends.all()
+    yesterday_friends_list = []
+    for yesterday_friend in yesterday_friends:
+        yesterday_friends_list.append(
+            Profile.objects.get(user=yesterday_friend))
+
+    ctx = {
+        'user': user,
+        'profile': profile,
+        'following_list': following_list,
+        'follower_list': follower_list,
+        'today_friends_list': today_friends_list,
+        'yesterday_friends_list': yesterday_friends_list,
+    }
+    return render(request, 'friends.html', ctx)
+
+
+def accept_friends(request, pk):
+    user = request.user
+    friend = User.objects.get(id=pk)
+
+    profile = Profile.objects.get(user=user)
+    profile.today_friends.add(friend)
+    profile.follower.remove(friend)
+    profile.save()
+
+    followings = profile.following.all()
+    following_list = []
+    for following in followings:
+        following_list.append(Profile.objects.get(user=following))
+
+    followers = profile.follower.all()
+    follower_list = []
+    for follower in followers:
+        follower_list.append(Profile.objects.get(user=follower))
+
+    today_friends = profile.today_friends.all()
+    today_friends_list = []
+    for today_friend in today_friends:
+        today_friends_list.append(Profile.objects.get(user=today_friend))
+
+    yesterday_friends = profile.yesterday_friends.all()
+    yesterday_friends_list = []
+    for yesterday_friend in yesterday_friends:
+        yesterday_friends_list.append(
+            Profile.objects.get(user=yesterday_friend))
+
+    ctx = {
+        'user': user,
+        'profile': profile,
+        'following_list': following_list,
+        'follower_list': follower_list,
+        'today_friends_list': today_friends_list,
+        'yesterday_friends_list': yesterday_friends_list,
+
+    }
+    return render(request, 'friends.html', ctx)

@@ -15,6 +15,9 @@ urlpatterns = [
     path('join/2', join2, name='join2'),
     path('join/3', join3, name='join3'),
     path('profile/<int:pk>', profile, name='profile'),
-    path('my_profile/<int:pk>', my_profile, name='my_profile'),
-    path('ask/<int:pk>', ask, name='ask')
+    path('my_profile', my_profile, name='my_profile'),
+    path('ask/<int:pk>', ask, name='ask'),
+    path('friends', friends, name='friends'),
+    path('friends/accept/<int:pk>', accept_friends, name='accept_friends'),
+
 ]

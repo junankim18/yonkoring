@@ -31,7 +31,7 @@
             <input type="text" placeholder="친구에게 익명으로 ask를 해보세요!" />
         </form>
         <br />
-        <button>넘기기</button>
+        <a href="{% url 'yk:profile' random_user.id%}"><button>넘기기</button></a>
         <button>FRIENDS</button>
     </body>
 </html>

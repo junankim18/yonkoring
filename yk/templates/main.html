@@ -16,6 +16,10 @@
 
         <a href="{% provider_login_url 'kakao' method='oauth2' %}">카카오 로그인</a>
 
+        <a href="/accounts/logout">로그아웃</a>
+
+        <a href="{% url 'yk:profile' random_user.id%}">친구찾기</a>
+
         <a href="{% url 'yk:join_start' %}">join</a>
     </body>
 </html>

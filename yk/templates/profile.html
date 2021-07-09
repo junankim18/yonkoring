@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
     </head>
+
     <body>
         <div>
             <img src="{{profile.profile_image.url}}" alt="" width="100" />
@@ -17,14 +18,16 @@
             <p>#{{interest}}</p>
             {% endfor %}
         </div>
+
         <div>
             <a href="{% url 'yk:ask' user.id%}"><button>ask</button></a>
         </div>
+
         <div>
             {% for ask in asks %}
             <p>q. {{ask}}</p>
             {% for answer in ask.ask.all %}
-            <p>a. {{answer}}</p>
+            <p>a. {{answer}} / {{answer.answered_at}}</p>
             {% endfor %} {% endfor %}
         </div>
         <form action="">
@@ -32,6 +35,6 @@
         </form>
         <br />
         <a href="{% url 'yk:profile' random_user.id%}"><button>넘기기</button></a>
-        <button>FRIENDS</button>
+        <a href="{% url 'yk:follow' profile.user.id%}"><button>FRIENDS</button></a>
     </body>
 </html>

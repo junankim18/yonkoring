@@ -19,5 +19,6 @@ urlpatterns = [
     path('ask/<int:pk>', ask, name='ask'),
     path('friends', friends, name='friends'),
     path('friends/accept/<int:pk>', accept_friends, name='accept_friends'),
+    path('friends/follow/<int:pk>', follow, name='follow'),
 
 ]

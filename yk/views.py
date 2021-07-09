@@ -1,13 +1,17 @@
 import random
 from django.shortcuts import render, redirect
 from .models import *
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 
 
 def main(request):
     admin = User.objects.get(id=1)
     user_list = list(User.objects.all())
-    user_list.remove(request.user)
+    try:
+        if User.objects.get(user=request.user):
+            user_list.remove(request.user)
+    except:
+        pass
     user_list.remove(admin)
     random_user = random.choice(user_list)
 
@@ -132,6 +136,7 @@ def social_login(request):
 
 
 def profile(request, pk):
+
     user = User.objects.get(id=pk)
     admin = User.objects.get(id=1)
     profile = Profile.objects.get(user=user)
@@ -145,6 +150,7 @@ def profile(request, pk):
     for ask in asks:
         if len(ask.ask.all()) == 0:
             asks.remove(ask)
+
     ctx = {
         'user': user,
         'profile': profile,
@@ -167,10 +173,25 @@ def my_profile(request):
 
 
 def ask(request, pk):
-    ctx = {
-
-    }
-    return render(request, 'ask.html', ctx)
+    user = request.user
+    friend = User.objects.get(id=pk)
+    if request.method == 'GET':
+        ctx = {
+            'friend': friend,
+            'user': user
+        }
+        return render(request, 'ask.html', ctx)
+    elif request.method == 'POST':
+        new_ask = Ask()
+        new_ask.question = request.POST['question']
+        new_ask.ask_to = friend
+        new_ask.ask_from = user
+        new_ask.save()
+        ctx = {
+            'friend': friend,
+            'user': user
+        }
+        return redirect('/profile/'+str(friend.id))
 
 
 def friends(request):
@@ -248,3 +269,12 @@ def accept_friends(request, pk):
 
     }
     return render(request, 'friends.html', ctx)
+
+
+def follow(request, pk):
+    user = request.user
+    friend = User.objects.get(id=pk)
+    friend_profile = Profile.objects.get(user=friend)
+    friend_profile.follower.add(user)
+    friend_profile.save()
+    return redirect('/profile/'+str(friend.id))

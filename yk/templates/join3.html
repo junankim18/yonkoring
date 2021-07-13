@@ -1,23 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-    </head>
-    <body>
-        <h1>어떤 사람인가요?</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+    <!-- <link rel="stylesheet" href="profile3.css"> -->
+    <style>
+        @import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    height: 100%;
+}
+.container {
+    margin: 0 auto;
+    max-width: 375px;
+    height: 100%;
+    background-color: white;
+
+
+}
+#back{
+    display:flex;
+    font-size:18px;
+    margin-top: 10px;
+    margin-left: 10px;
+    border-radius: 40px;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    cursor:pointer;
+}
+#back:hover{
+    color: white;
+    background-color: #49B6FF;
+}
+.header {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+
+
+  }
+
+#header_title {
+    display: flex;
+    margin-bottom: 12px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    font-size: 28px;
+    font-weight: 700;
+}
+#header_info{
+
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    font-size: 14px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.005em;
+    color: #A7B0C0;
+
+}
+.self_info_wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 12px;
+    align-items: center;
+    text-align: center;
+}
+.self_info {
+    width: 315px;
+    height: 55px;
+    display: flex;
+    gap: 8px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    border-radius: 8px;
+    border: solid 1px #e1e3e6;
+    background-color: #ffffff;
+    color: #C3C7CE;
+    cursor:pointer;
+    margin-bottom: 12px;
+}
+.self_info_info {
+    display: flex;
+    width: 315px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+    text-transform: uppercase;
+    color: #C4CBD8;
+    margin-bottom: 60px;
+}
+
+#antecedents {
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 32px;
+    letter-spacing: -0.005em;
+    color: #1A1C2D;
+    margin-left: 22px;
+}
+.intro_urself {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.introduce {
+
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 5px;
+    resize: none;
+    width: 90%;
+    min-height: 56px;
+    /* margin-bottom: 100px; */
+    font-family: Spoqa Han Sans Neo;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    margin-bottom: 12px;
+    line-height: 15px;
+}
+#page {
+    display: block;
+    text-align: right;
+    color: #A7B0C0;
+    font-size: 14px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif'; 
+    margin-right: 30px;
+    margin-bottom: 45px;
+}
+
+
+
+#submit {
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif'; 
+    display: flex;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    text-align: center;
+    
+    margin: 0 auto;
+    cursor: pointer;
+    width: 160px;
+    height: 56px;
+    padding: 18px 65px 19px;
+    border-radius: 60px;
+    border-style: none;
+    background-color: #12121d;
+    color: #EEEEEE;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+#submit:hover {
+    background-color: #18A0FB;
+}
+
+#yb {
+    height: 100px;
+}
+    </style>
+    <title>연고링</title>
+</head>
+<body>
+    <div class="container">
+        <div class="top-navbar">
+            <div id="back">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+        </div>
+        <header class="header">
+            <div id="header_title">선택사항</div>
+            <div id="header_info">관심사나 대화하고 싶은 주제를 적어주세요! </div>
+        </header>
         <form action="{% url 'yk:join3' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <h3><label for="interest">관심사를 적어주세요</label></h3>
-            <input type="text" name="interest" />
-            <br />
-            <h3><label for="club">활동 이력을 적어주세요</label></h3>
-            <input type="text" name="club" />
-            <br />
-            <button type="submit"><h4>제출</h4></button>
-        </form>
-        <a href="{% url 'yk:join_done' %}">다음 페이지</a>
-    </body>
+
+        <div class="self_info_wrapper">
+            <input class="self_info" type="text" placeholder="해시태그 입력하기" name ="self_info">
+            <div class="self_info_info">
+                #스타트업#맛집탐방 #친구만들기 #외국어 #봉사활동#반려동물#코딩#대학원#여행#패션#연애#계절학기#취업#게임#음악#다이어트#운동#알바#과제#자기계발#우주#치맥#수다#비트코인#영화 등등
+            </div>
+        </div>
+
+        <div id="antecedents">활동이력을 적고 관련 친구들을 만나보세요.</div>
+
+        <div class="intro_urself">
+            <textarea name="introduce" class="introduce" onkeydown="resize(this);" onkeyup="resize(this);" placeholder="전공/근무회사/가입한 동아리/학회 활동 등등"></textarea>
+        </div>
+        <div id="page">2/2 페이지</div>
+        <button id="submit" type="submit">확인</button>
+        <div id="yb"></div>
+
+
+        <script type="text/javascript">
+                function resize(obj) {
+                obj.style.height = "1px";
+                obj.style.height = (12+obj.scrollHeight)+"px";
+        }
+        </script>
+</body>
 </html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>어떤 사람인가요?</h1>
+        <form action="{% url 'yk:join3' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h3><label for="interest">관심사를 적어주세요</label></h3>
+            <input type="text" name="interest" />
+            <br />
+            <h3><label for="club">활동 이력을 적어주세요</label></h3>
+            <input type="text" name="club" />
+            <br />
+            <button type="submit"><h4>제출</h4></button>
+        </form>
+        <a href="{% url 'yk:join_done' %}">다음 페이지</a>
+    </body>
+</html>

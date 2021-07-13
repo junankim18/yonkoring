@@ -47,6 +47,12 @@ class Profile(models.Model):
         settings.AUTH_USER_MODEL, related_name='today_friends', blank=True)
     yesterday_friends = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='yesterday_friends', blank=True)
+    latitude = models.CharField(
+        verbose_name='위도', max_length=100, null=True, blank=True)
+    longitude = models.CharField(
+        verbose_name='경도', max_length=100, null=True, blank=True)
+    address = models.CharField(
+        verbose_name='주소', max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.user.username

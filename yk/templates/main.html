@@ -23,5 +23,63 @@
         <a href="{% url 'yk:my_profile' %}">내 프로필</a>
 
         <a href="{% url 'yk:join_start' %}">join</a>
+
+        <div id="map" style="width: 500px; height: 400px"></div>
     </body>
+
+    <script
+        type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=10ac4044de47db57c8b24d1940511876&libraries=services"
+    ></script>
+    <script></script>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                // GPS를 지원하면
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        const coords = position.coords;
+
+                        var geocoder = new kakao.maps.services.Geocoder();
+                        function searchAddrFromCoords(coords, callback) {
+                            // 좌표로 행정동 주소 정보를 요청합니다
+                            geocoder.coord2RegionCode(coords.longitude, coords.latitude, callback);
+                        }
+                        searchAddrFromCoords(coords, displayCenterInfo);
+
+                        function displayCenterInfo(result, status) {
+                            if (status === kakao.maps.services.Status.OK) {
+                                for (var i = 0; i < result.length; i++) {
+                                    // 행정동의 region_type 값은 'H' 이므로
+                                    if (result[i].region_type === "H") {
+                                        const address = result[0].region_2depth_name;
+                                        const request = new XMLHttpRequest();
+                                        const url = "location/";
+                                        request.open("POST", url, true);
+                                        request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                        request.send(JSON.stringify({ latitude, longitude, address }));
+                                        console.log(latitude + " " + longitude + " " + address);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    function (error) {
+                        console.error(error);
+                    },
+                    {
+                        enableHighAccuracy: false,
+                        maximumAge: 0,
+                        timeout: Infinity,
+                    }
+                );
+            } else {
+                alert("GPS를 지원하지 않습니다");
+            }
+        }
+        getLocation();
+    </script>
 </html>

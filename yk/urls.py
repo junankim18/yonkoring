@@ -20,5 +20,6 @@ urlpatterns = [
     path('friends', friends, name='friends'),
     path('friends/accept/<int:pk>', accept_friends, name='accept_friends'),
     path('friends/follow/<int:pk>', follow, name='follow'),
+    path('location/', location, name='location'),
 
 ]

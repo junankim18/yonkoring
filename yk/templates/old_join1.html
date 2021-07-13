@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <form action="{% url 'yk:join1'%}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h3><label for="image">프로필 사진</label></h3>
+            <input type="file" name="image" />
+            <br />
+            <label for="nickname">닉네임/이름</label>
+            <input type="text" name="nickname" />
+            <br />
+            <label for="phone_number">전화번호</label>
+            <input type="tel" name="phone_number" placeholder="- 없이 입력 ex)01012345678" />
+            <br />
+            <select name="school">
+                <option>소속 대학교</option>
+                <option value="yonsei">연세대학교</option>
+                <option value="korea">고려대학교</option>
+            </select>
+            <input type="radio" value="block" name="block_school" />
+            <label for="block_school">비공개</label>
+            <input type="radio" value="show" name="block_school" checked="True" />
+            <label for="block_school">공개</label>
+            <br />
+            <label for="age">나이</label>
+            <input type="text" name="age" />
+            <br />
+            <select name="mbti">
+                <option><h3>mbti</h3></option>
+                <option value="entp"><h3>ENTP</h3></option>
+                <option value="estp"><h3>ESTP</h3></option>
+            </select>
+            <br />
+            <select name="gender">
+                <option>성별</option>
+                <option value="male">남성</option>
+                <option value="female">여성</option>
+            </select>
+            <br />
+            <h3><label for="bio">개성있는 자기소개</label></h3>
+            <textarea name="bio"></textarea>
+            <br />
+
+            <button type="submit"><h4>제출</h4></button>
+        </form>
+        <a href="{% url 'yk:join2' %}">다음 페이지</a>
+    </body>
+</html>

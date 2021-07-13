@@ -1,54 +1,474 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-    </head>
-    <body>
-        <form action="{% url 'yk:join1'%}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h3><label for="image">프로필 사진</label></h3>
-            <input type="file" name="image" />
-            <br />
-            <label for="nickname">닉네임/이름</label>
-            <input type="text" name="nickname" />
-            <br />
-            <label for="phone_number">전화번호</label>
-            <input type="tel" name="phone_number" placeholder="- 없이 입력 ex)01012345678" />
-            <br />
-            <select name="school">
-                <option>소속 대학교</option>
-                <option value="yonsei">연세대학교</option>
-                <option value="korea">고려대학교</option>
-            </select>
-            <input type="radio" value="block" name="block_school" />
-            <label for="block_school">비공개</label>
-            <input type="radio" value="show" name="block_school" checked="True" />
-            <label for="block_school">공개</label>
-            <br />
-            <label for="age">나이</label>
-            <input type="text" name="age" />
-            <br />
-            <select name="mbti">
-                <option><h3>mbti</h3></option>
-                <option value="entp"><h3>ENTP</h3></option>
-                <option value="estp"><h3>ESTP</h3></option>
-            </select>
-            <br />
-            <select name="gender">
-                <option>성별</option>
-                <option value="male">남성</option>
-                <option value="female">여성</option>
-            </select>
-            <br />
-            <h3><label for="bio">개성있는 자기소개</label></h3>
-            <textarea name="bio"></textarea>
-            <br />
 
-            <button type="submit"><h4>제출</h4></button>
-        </form>
-        <a href="{% url 'yk:join2' %}">다음 페이지</a>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="profile.css"> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    </link>
+    <title>연고링</title>
+    <style type="text/css">
+    @import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    height: 100%;
+}
+.container {
+        margin: 0 auto;
+        max-width: 375px;
+        height: 100%;
+        background-color: white;
+
+}
+#back{
+    display:flex;
+    font-size:18px;
+    margin-top: 10px;
+    margin-left: 10px;
+    border-radius: 40px;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    cursor:pointer;
+}
+#back:hover{
+    color: white;
+    background-color: #49B6FF;
+}
+
+.header {
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+#header_title {
+    display: flex;
+
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    font-size: 28px;
+    font-weight: 700;
+}
+#place{
+    display: flex;
+    align-items: center;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    font-size: 12px;
+    font-weight: 400;
+    color: #A7B0C0;
+}
+.profile_img_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width:100%;
+    height: 200px;
+}
+.profile_img_container > label{
+    background-color: transparent;
+    border: none;
+}
+
+.profile_img_wrapper {
+    display: flex;
+    width: 125px;
+    height: 125px;
+    border-radius:70%;
+    overflow: hidden;
+}
+.profileImage-text {
+    display: flex;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    font-size: 13px;
+    font-weight: 700;
+    color: #49B6FF;
+    margin-top: 10px;
+    letter-spacing: -0.05px;
+    cursor:pointer;
+}
+.profileImage-text2 {
+    font-size: 10px;
+    font-weight: 400;
+    margin-top: 5px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    color: #A7B0C0;
+}
+
+.phone_container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 30px;
+    margin-right: 30px;
+    width:315px;
+    border-bottom: 1px solid #dedfe0;
+    
+}
+
+#onlyNumber{
+    display: flex;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif'; 
+    font-size: 16px;
+    justify-content: center;
+    align-items: center;
+    background:url('input_bg.jpg') no-repeat;
+    padding:15px;
+    border:0;
+    width:275px;
+    color:#373d39;
+    cursor:pointer;
+
+}
+
+#phone_info{
+    margin:0 auto;
+    width: 315px;
+    color:#A7B0C0;
+    font-size: 10px;
+    font-weight: 400;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    margin-bottom: 12px;
+}
+
+
+.name_wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    justify-content: center;
+    margin-bottom: 12px;
+
+}
+.input_name {
+    width: 315px;
+    height: 40px;
+    display: flex;
+    gap: 8px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    border-radius: 8px;
+    border: solid 1px #e1e3e6;
+    background-color: #ffffff;
+    color: #C3C7CE;
+    cursor:pointer;
+}
+.school_wrapper {
+    width: 100%;
+    display: flex;
+    margin-bottom: 12px;
+}
+.input_school {
+    width: 200px;
+    height: 40px;
+    gap: 8px;
+    border-radius: 8px;
+    border: solid 1px #e1e3e6;
+    background-color: #ffffff;
+    cursor:pointer;
+    color: #4f5052;
+    margin-left: 27px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance : none;
+}
+#hide {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    margin-left: 12px;
+}
+.fa-check-circle {
+    font-size: 24px;
+    color:#49B6FF;
+    cursor:pointer;
+
+}
+.age_wrapper {
+    width: 100%;
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    
+}
+.input_age {
+    width: 315px;
+    height: 40px;
+    display: flex;
+    gap: 8px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    border-radius: 8px;
+    border: solid 1px #e1e3e6;
+    background-color: #ffffff;
+    cursor:pointer;
+    color: #C3C7CE;
+}
+#age_text {
+    font-size: 10px;
+    font-weight: 400;
+    margin-top: 5px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    color: #A7B0C0;
+}
+.mbti_wrapper {
+    display: flex;
+    justify-content: center;
+}
+.mbti_input {
+    width: 320px;
+    height:40px;
+    padding:5px;
+    border:1px solid #e1e3e6;
+    background-color: #ffffff;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    border-radius:8px;
+    cursor:pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance : none;
+    color: #4f5052;
+}
+.gender_wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;
+    margin-bottom: 12px;
+    
+}
+#gender_info {
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 5px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    color: #404D61;
+    margin-left: 27px;
+    margin-top: 12px;
+}
+
+.select {
+    padding: 15px 10px;
+    margin-left:20px;
+}
+.select input[type=radio]{
+    display: none;
+}
+.select input[type=radio]+label{
+    display: inline-block;
+    cursor: pointer;
+    height: 24px;
+    width: 90px;
+    border-radius: 16px;
+    border: 1px solid #49B6FF;
+    line-height: 24px;
+    text-align: center;
+    font-weight:bold;
+    font-size:13px;
+}
+.select input[type=radio]+label{
+    background-color: #fff;
+    color: #49B6FF;
+}
+.select input[type=radio]:checked+label{
+    background-color: #49B6FF;
+    color: #fff;
+}
+#intro_info{
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 5px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    color: #404D61;
+    margin-left: 27px;
+    margin-bottom: 12px;
+}
+
+.intro_urself {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.introduce {
+    background: #F8FAFD;
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 5px;
+    resize: none;
+    width: 90%;
+    min-height: 100px;
+    /* margin-bottom: 100px; */
+    font-family: Spoqa Han Sans Neo;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    margin-bottom: 12px;
+    line-height: 15px;
+}
+#page {
+    display: block;
+    text-align: right;
+    color: #A7B0C0;
+    font-size: 14px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif'; 
+    margin-right: 30px;
+    margin-bottom: 45px;
+}
+
+
+
+#submit {
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif'; 
+    display: flex;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    text-align: center;
+    cursor:pointer;
+    margin: 0 auto;
+
+    width: 160px;
+    height: 56px;
+    padding: 18px 65px 19px;
+    border-radius: 60px;
+    border-style: none;
+    background-color: #12121d;
+    color: #EEEEEE;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+#submit:hover {
+    background-color: #18A0FB;
+}
+
+#yb {
+    height: 100px;
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="top-navbar">
+            <div id="back">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+        </div>
+        <header class="header">
+            <div id="header_title">프로필 만들기</div>
+            <div id="place"><i class="fas fa-map-marker-alt" style="margin-right: 3px;"></i>행정시 행정동</div>
+            <!-- 장고문법으로 지역 받아오는거로 바꾸면 됩니다 -->
+        </header>
+        <form action="{% url 'yk:join1'%}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="profile_img_container">
+            <div class="profile_img_wrapper">
+                <img src="{% static 'default_photo.png' %}" alt="">
+            </div>
+            <div class="profileImage-text">
+            <a><label for="image">프로필 사진 업로드하기</label></a>
+
+                <!-- 이미지 업로드 관련해서 여기 a태그에 넣으면 됩니다 -->
+            </div>
+            <label>
+                <input type="file" name="image" />
+            </label>
+            <div class="profileImage-text2">자신의 개성을 나타낼 수 있는 사진으로 업로드해주세요 :)</div>
+        </div>
+        <div class="phone_container">
+            <i class="fas fa-phone fa-flip-horizontal" style="color: #1A1C2D;"></i>
+            <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" id="onlyNumber" name="onlyNumber" maxlength="11" placeholder="'-'를 제외한 휴대폰번호 입력 *" >
+
+        </div>
+        <div id="phone_info">
+            연락을 드리기 위해서 꼭 사용하시는 전화번호를 적어주세요! 띄어쓰기 없는 숫자로 입력해 주세요. (개인정보는 프로젝트 종료 후 즉시 폐기예정)
+        </div>
+
+        <div class="name_wrapper">
+            <input required class="input_name" type="text" placeholder="이름을 적어주세요(실명or닉네임). *" name ="name">
+        </div>
+        <div class="school_wrapper">
+            <select class="input_school" name='school'>
+                <option value="">학교를 선택해주세요. *</option>
+                <option value="korea">고려대학교</option>
+                <option value="yonsei">연세대학교</option>
+            </select>
+            <div id="hide">
+                <!-- 비공개 관련해서는 이곳 또는 밑에 스크립트에 넣어주시면 됩니다 -->
+                <i onclick="togglecheck(this)" class="far fa-check-circle" value='block'></i>
+                <div style="margin-left: 5px; color: #5A6474; font-family: 'Spoqa Han Sans Neo', 'sans-serif'; font-size:15px;">비공개</div>
+            </div>
+        </div>
+        <div class="age_wrapper">
+            <input required class="input_age" type="number" placeholder="나이를 입력해주세요. *" name ="age">
+            <div id="age_text">부담가지지 마세요~ 나이는 초·중·후반 방식으로 그룹별로 표기됩니다! </div>
+        </div>
+        <div class="mbti_wrapper"> 
+            <select class="mbti_input" name='mbti'>
+                <option value="">MBTI를 선택해주세요. *</option>
+                <option value="INTJ">INTJ 용의주도한 전략가</option>
+                <option value="INTP">INTP 논리적인 사색가</option>
+                <option value="ENTJ">ENTJ 대담한 통솔자</option>
+                <option value="ENTP">ENTP 논쟁즐기는 변론가</option>
+                <option value="INFJ">INFJ 선의의 옹호자</option>
+                <option value="INFP">INFP 열정적인 중재자</option>
+                <option value="ENFJ">ENFJ 정의로운 사회운동가</option>
+                <option value="ENFP">ENFP 재기발랄한 활동가</option>
+                <option value="ISTJ">ISTJ 청렴결백 논리주의자</option>
+                <option value="ISFJ">ISFJ 용감한 수호자</option>
+                <option value="ESTJ">ESTJ 엄격한 관리자</option>
+                <option value="ESTJ">ESFJ 사교적인 외교관</option>
+                <option value="ISTP">ISTP 만능재주꾼</option>
+                <option value="ISFP">ISFP 호기심 많은 예술가</option>
+                <option value="ESTP">ESTP 모험즐기는 사업가</option>
+                <option value="ESFP">ESFP 자유영혼 연예인</option>
+            </select>
+        
+        </div>
+        <div class="gender_wrapper">
+            <div id="gender_info">성별을 선택해 주세요  *</div>
+            <div class="select" name='gender'>
+                <!-- 이곳에 인풋 둘 다 required가 붙었는데 이렇게 써도 될지 모르겠습니다. 만약 에러나면 둘 다 required 빼주세요. -->
+                <input required type="radio" id="select" name="gender" value='male'><label for="select">남자</label>
+                <input required type="radio" id="select2" name="gender" value='female'><label for="select2">여자</label>
+            </div>
+        </div>
+        <div id="intro_info">개성있는 자기소개 *</div>
+        <div class="intro_urself">
+            <textarea name="introduce" class="introduce" required onkeydown="resize(this);" onkeyup="resize(this);" placeholder="tip. 어떤 친구와 대화하고 싶은지 적어두면 더 좋아요!
+            예시) 미대에 다니는 다양한 삶을 살고싶어하는 미개봉화석^^ 요즘 스타트업에 관심이 생겨서 관련하신 분들과 이야기하면 좋을 것 같아용 ㅎㅎ"></textarea>
+        </div>
+
+        <div id="page">1/2 페이지</div>
+        <button id="submit" type="submit">확인</button>
+        <div id="yb"></div>
+
+    </div>
+
+
+    <script>
+        function togglecheck(x) {
+            x.classList.toggle("fas");
+            // 또는 비공개 관련해서 이곳에 넣어주시면 됩니다
+        }
+        function resize(obj) {
+        obj.style.height = "1px";
+        obj.style.height = (12+obj.scrollHeight)+"px";
+        }
+              
+    </script>
+</body>
+
 </html>

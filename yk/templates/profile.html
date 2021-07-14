@@ -9,13 +9,13 @@
 
     <body>
         <div>
-            <img src="{{profile.profile_image.url}}" alt="" width="100" />
-            <h1>{{profile.nickname}}</h1>
-            <p>{{profile.school}}/{{profile.gender}}/{{profile.age}}/{{profile.mbti}}</p>
-            <p>{{profile.major}} {{profile.goal}}</p>
-            <p>{{profile.club}}</p>
-            <p>{{profile.address}}</p>
-            {% for interest in profile.interest.all %}
+            <img src="{{friend_profile.profile_image.url}}" alt="" width="100" />
+            <h1>{{friend_profile.nickname}}</h1>
+            <p>{{friend_profile.school}}/{{friend_profile.gender}}/{{friend_profile.age}}/{{friend_profile.mbti}}</p>
+            <p>{{friend_profile.major}} {{friend_profile.goal}}</p>
+            <p>{{friend_profile.club}}</p>
+            <p>{{friend_profile.address}}</p>
+            {% for interest in friend_profile.interest.all %}
             <p>#{{interest}}</p>
             {% endfor %}
         </div>
@@ -36,6 +36,6 @@
         </form>
         <br />
         <a href="{% url 'yk:profile' random_user.id%}"><button>넘기기</button></a>
-        <a href="{% url 'yk:follow' profile.user.id%}"><button>FRIENDS</button></a>
+        <a href="{% url 'yk:follow' friend_profile.user.id%}"><button>FRIENDS</button></a>
     </body>
 </html>

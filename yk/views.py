@@ -144,14 +144,19 @@ def social_login(request):
 
 def profile(request, pk):
 
-    user = User.objects.get(id=pk)
+    friend = User.objects.get(id=pk)
     admin = User.objects.get(id=1)
-    profile = Profile.objects.get(user=user)
-    asks = list(Ask.objects.filter(ask_to=user))
+    friend_profile = Profile.objects.get(user=friend)
+    asks = list(Ask.objects.filter(ask_to=friend))
     user_list = list(User.objects.all())
-    user_list.remove(user)
-    user_list.remove(request.user)
+    user_list.remove(friend)
+    try:
+        user_list.remove(request.user)
+    except:
+        pass
     user_list.remove(admin)
+    print(user_list)
+
     random_user = random.choice(user_list)
 
     for ask in asks:
@@ -159,8 +164,8 @@ def profile(request, pk):
             asks.remove(ask)
 
     ctx = {
-        'user': user,
-        'profile': profile,
+        'friend': friend,
+        'friend_profile': friend_profile,
         'asks': asks,
         'random_user': random_user
     }

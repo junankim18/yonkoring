@@ -14,6 +14,7 @@
             <label for="answer"></label>
             <input type="text" name="answer" placeholder="답변을 입력해주세요" />
             <button type="submit" onclick="onClickAnswer({{ask.id}})">{% csrf_token %} answer</button>
+            <a href="{% url 'yk:report_ask' ask.id%}"><button onclick="ReportAsk({{ask.id}})">신고하기</button></a>
         </div>
         {% endfor %}
     </body>

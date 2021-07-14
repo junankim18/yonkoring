@@ -1,3 +1,8 @@
+from celery import Celery
+from celery.schedules import crontab
+import schedule
+import time
+import threading
 import requests
 from urllib.parse import urlparse
 from django.http import JsonResponse
@@ -13,14 +18,12 @@ import json
 def main(request):
     admin = User.objects.get(id=1)
     user_list = list(User.objects.all())
-    # print(request.user)
     try:
         user_list.remove(request.user)
     except:
         pass
     user_list.remove(admin)
     random_user = random.choice(user_list)
-    print(user_list)
 
     user = request.user
     ctx = {
@@ -163,7 +166,7 @@ def profile(request, pk):
     ask_mine = list(Ask.objects.filter(ask_to=friend, ask_from=request.user))
     asks = []
     for i in range(len(asks_whole)):
-        if len(asks_whole[i].ask.all()) != 0:
+        if len(asks_whole[i].ask.all()) != 0 and asks[i].ask_report == None:
             asks.append(asks_whole[i])
     for i in range(len(ask_mine)):
         asks.append(ask_mine[i])
@@ -181,7 +184,7 @@ def my_ask(request):
     asks = list(Ask.objects.filter(ask_to=request.user))
     my_ask = []
     for i in range(len(asks)):
-        if len(asks[i].ask.all()) == 0:
+        if len(asks[i].ask.all()) == 0 and asks[i].ask_report == None:
             my_ask.append(asks[i])
     ctx = {
         'my_ask': my_ask
@@ -192,7 +195,7 @@ def my_ask(request):
 def my_profile(request):
     user = request.user
     profile = Profile.objects.get(user=user)
-    asks = list(Ask.objects.filter(ask_to=user))
+    asks = list(Ask.objects.filter(ask_to=user, ask_report=None))
     ctx = {
         'user': user,
         'profile': profile,
@@ -329,3 +332,25 @@ def location(request):
     profile.address = address
     profile.save()
     return JsonResponse({'latitude': latitude, 'longitude': longitude, 'address': address})
+
+
+def report_user(request, pk):
+    friend = User.objects.get(id=pk)
+    friend_profile = Profile.objects.get(user=friend)
+    friend_profile.user_report.add(request.user)
+    friend_profile.save()
+    return redirect('/')
+
+
+def report_ask(request, pk):
+    ask = Ask.objects.get(id=pk)
+    ask.ask_report = request.user
+    ask.save()
+    return redirect('/')
+
+
+def printhello():
+    print('hello')
+
+
+schedule.every().day.at('21:09').do(printhello)

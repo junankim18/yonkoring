@@ -23,5 +23,6 @@ urlpatterns = [
     path('ask/', ask, name='ask'),
     path('my_ask', my_ask, name='my_ask'),
     path('answer/', answer, name='answer'),
-
+    path('report_user/<int:pk>', report_user, name='report_user'),
+    path('report_ask/<int:pk>', report_ask, name='report_ask'),
 ]

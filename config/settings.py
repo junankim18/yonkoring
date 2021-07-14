@@ -66,6 +66,13 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.kakao',
 
+    # contrab
+    'django_crontab'
+
+]
+
+CRONJOBS = [
+    ('*/1 * * * *', 'yk.cron.every1am')
 ]
 
 MIDDLEWARE = [

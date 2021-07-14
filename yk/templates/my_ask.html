@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <p>my_ask</p>
+        {% for ask in my_ask %}
+        <div class="answerbox_{{ask.id}}">
+            <p>{{ask.question}}</p>
+            <label for="answer"></label>
+            <input type="text" name="answer" placeholder="답변을 입력해주세요" />
+            <button type="submit" onclick="onClickAnswer({{ask.id}})">{% csrf_token %} answer</button>
+        </div>
+        {% endfor %}
+    </body>
+    <script>
+        const request = new XMLHttpRequest();
+
+        const onClickAnswer = (id) => {
+            const url = "/answer/";
+            const input = document.querySelector(`.answerbox_${id} input`);
+            const answer = input.value;
+            request.open("POST", url, true);
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.send(JSON.stringify({ id, answer }));
+        };
+
+        const handleResponseAnswer = () => {
+            if (request.status <= 400) {
+                const { ask_id, answer } = JSON.parse(request.response);
+                const div = document.querySelector(`.answerbox_${ask_id}`);
+                div.style.display = "none";
+            }
+        };
+        request.onreadystatechange = () => {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                handleResponseAnswer();
+            }
+        };
+    </script>
+</html>

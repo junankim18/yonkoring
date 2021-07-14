@@ -21,5 +21,7 @@ urlpatterns = [
     path('friends/follow/<int:pk>', follow, name='follow'),
     path('location/', location, name='location'),
     path('ask/', ask, name='ask'),
+    path('my_ask', my_ask, name='my_ask'),
+    path('answer/', answer, name='answer'),
 
 ]

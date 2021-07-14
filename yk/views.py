@@ -160,10 +160,13 @@ def profile(request, pk):
     friend_profile = Profile.objects.get(user=friend)
 
     asks_whole = list(Ask.objects.filter(ask_to=friend))
+    ask_mine = list(Ask.objects.filter(ask_to=friend, ask_from=request.user))
     asks = []
     for i in range(len(asks_whole)):
         if len(asks_whole[i].ask.all()) != 0:
             asks.append(asks_whole[i])
+    for i in range(len(ask_mine)):
+        asks.append(ask_mine[i])
 
     ctx = {
         'friend': friend,
@@ -172,6 +175,18 @@ def profile(request, pk):
         'random_user': random_user
     }
     return render(request, 'profile.html', ctx)
+
+
+def my_ask(request):
+    asks = list(Ask.objects.filter(ask_to=request.user))
+    my_ask = []
+    for i in range(len(asks)):
+        if len(asks[i].ask.all()) == 0:
+            my_ask.append(asks[i])
+    ctx = {
+        'my_ask': my_ask
+    }
+    return render(request, 'my_ask.html', ctx)
 
 
 def my_profile(request):
@@ -199,6 +214,20 @@ def ask(request):
         new_ask.ask_from = request.user
         new_ask.save()
         return JsonResponse({'friend_id': friend_id, 'question': question})
+
+
+@ csrf_exempt
+def answer(request):
+    if request.method == 'POST':
+        req = json.loads(request.body)
+        ask_id = req['id']
+        answer = req['answer']
+        this_ask = Ask.objects.get(id=ask_id)
+        new_answer = Answer()
+        new_answer.ask = this_ask
+        new_answer.answer = answer
+        new_answer.save()
+        return JsonResponse({'ask_id': ask_id, 'answer': answer})
 
 
 def friends(request):

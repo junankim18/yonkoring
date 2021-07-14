@@ -13,13 +13,14 @@ import json
 def main(request):
     admin = User.objects.get(id=1)
     user_list = list(User.objects.all())
+    # print(request.user)
     try:
-        if User.objects.get(user=request.user):
-            user_list.remove(request.user)
+        user_list.remove(request.user)
     except:
         pass
     user_list.remove(admin)
     random_user = random.choice(user_list)
+    print(user_list)
 
     user = request.user
     ctx = {
@@ -146,8 +147,6 @@ def profile(request, pk):
 
     friend = User.objects.get(id=pk)
     admin = User.objects.get(id=1)
-    friend_profile = Profile.objects.get(user=friend)
-    asks = list(Ask.objects.filter(ask_to=friend))
     user_list = list(User.objects.all())
     user_list.remove(friend)
     try:
@@ -155,13 +154,16 @@ def profile(request, pk):
     except:
         pass
     user_list.remove(admin)
-    print(user_list)
 
     random_user = random.choice(user_list)
 
-    for ask in asks:
-        if len(ask.ask.all()) == 0:
-            asks.remove(ask)
+    friend_profile = Profile.objects.get(user=friend)
+
+    asks_whole = list(Ask.objects.filter(ask_to=friend))
+    asks = []
+    for i in range(len(asks_whole)):
+        if len(asks_whole[i].ask.all()) != 0:
+            asks.append(asks_whole[i])
 
     ctx = {
         'friend': friend,
@@ -184,26 +186,19 @@ def my_profile(request):
     return render(request, 'my_profile.html', ctx)
 
 
-def ask(request, pk):
-    user = request.user
-    friend = User.objects.get(id=pk)
-    if request.method == 'GET':
-        ctx = {
-            'friend': friend,
-            'user': user
-        }
-        return render(request, 'ask.html', ctx)
-    elif request.method == 'POST':
+@ csrf_exempt
+def ask(request):
+    if request.method == 'POST':
+        req = json.loads(request.body)
+        friend_id = req['id']
+        question = req['question']
+        friend = User.objects.get(id=friend_id)
         new_ask = Ask()
-        new_ask.question = request.POST['question']
+        new_ask.question = question
         new_ask.ask_to = friend
-        new_ask.ask_from = user
+        new_ask.ask_from = request.user
         new_ask.save()
-        ctx = {
-            'friend': friend,
-            'user': user
-        }
-        return redirect('/profile/'+str(friend.id))
+        return JsonResponse({'friend_id': friend_id, 'question': question})
 
 
 def friends(request):
@@ -292,7 +287,7 @@ def follow(request, pk):
     return redirect('/profile/'+str(friend.id))
 
 
-@csrf_exempt
+@ csrf_exempt
 def location(request):
     req = json.loads(request.body)
     latitude = req['latitude']

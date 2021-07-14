@@ -20,9 +20,11 @@
             {% endfor %}
         </div>
 
+        {% comment %}
         <div>
             <a href="{% url 'yk:ask' user.id%}"><button>ask</button></a>
         </div>
+        {% endcomment %}
 
         <div>
             {% for ask in asks %}
@@ -31,11 +33,39 @@
             <p>a. {{answer}} / {{answer.answered_at}}</p>
             {% endfor %} {% endfor %}
         </div>
-        <form action="">
+        <div class="askbox">
             <input type="text" placeholder="친구에게 익명으로 ask를 해보세요!" />
-        </form>
+            <button type="submit" onclick="onClickAsk({{ friend.id }})">{% csrf_token %} ask</button>
+        </div>
         <br />
         <a href="{% url 'yk:profile' random_user.id%}"><button>넘기기</button></a>
         <a href="{% url 'yk:follow' friend_profile.user.id%}"><button>FRIENDS</button></a>
     </body>
+    <script>
+        const request = new XMLHttpRequest();
+
+        const onClickAsk = (id) => {
+            const url = "/ask/";
+            const input = document.querySelector(`.askbox input`);
+            const question = input.value;
+            request.open("POST", url, true);
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.send(JSON.stringify({ id, question }));
+        };
+
+        const handleResponse = () => {
+            if (request.status <= 400) {
+                const { id, question } = JSON.parse(request.response);
+                const input = document.querySelector(`.askbox input`);
+                input.value = "";
+                alert("질문을 완료했습니다!");
+            }
+        };
+
+        request.onreadystatechange = () => {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                handleResponse();
+            }
+        };
+    </script>
 </html>
